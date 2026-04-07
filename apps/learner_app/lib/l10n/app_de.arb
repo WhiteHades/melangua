@@ -1,0 +1,9 @@
+{
+  "appName": "Melingo",
+  "settingsTitle": "Einstellungen",
+  "diagnosticsOptIn": "Diagnose aktivieren",
+  "storeRawAudio": "Rohaudio lokal speichern",
+  "encryptionStatus": "Verschluesselungsstatus",
+  "encryptionEnabled": "fuer sensible Einstellungen aktiviert",
+  "encryptionDisabled": "deaktiviert"
+}
