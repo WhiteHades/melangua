@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
+import 'package:learner_app/src/models/model_manifest.dart';
 import 'package:learner_app/src/network/model_manifest_client.dart';
 
 void main() {
@@ -26,6 +27,8 @@ void main() {
 
     expect(manifest.version, '2026.04.01');
     expect(manifest.bundles.length, 3);
+    expect(manifest.bundles.first.id, 'lite');
+    expect(manifest.bundles.first.offlineCapable, true);
   });
 
   test('fetch manifest throws on non-200 status', () async {
