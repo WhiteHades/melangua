@@ -11,7 +11,10 @@ class UnimplementedAiBridgePlatform implements AiBridgePlatform {
 
   @override
   Future<String> runAsr({required List<int> pcm16leBytes}) async {
-    return 'asr_not_configured';
+    if (pcm16leBytes.isEmpty) {
+      return '';
+    }
+    return 'simulated transcript';
   }
 
   @override
