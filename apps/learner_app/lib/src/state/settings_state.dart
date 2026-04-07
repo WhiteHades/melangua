@@ -280,6 +280,11 @@ final Provider<SettingsRepository> settingsRepositoryProvider =
   return SettingsRepository();
 });
 
+final Provider<SettingsValueStore> settingsStoreProvider =
+    Provider<SettingsValueStore>((Ref ref) {
+  return SharedPreferencesSettingsStore();
+});
+
 final StateNotifierProvider<SettingsNotifier, AppSettings> settingsProvider =
     StateNotifierProvider<SettingsNotifier, AppSettings>(
   (Ref ref) {
