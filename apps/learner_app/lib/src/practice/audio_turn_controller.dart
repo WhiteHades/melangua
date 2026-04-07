@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'dart:typed_data';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -101,6 +102,7 @@ class AudioTurnController extends StateNotifier<AudioTurnState> {
       error: null,
       turnId: turnId,
     );
+    await _aiBridge.startRecording();
     _currentPcm = _fakeMicCapture(turnId);
   }
 
@@ -108,6 +110,7 @@ class AudioTurnController extends StateNotifier<AudioTurnState> {
     if (state.phase != AudioTurnPhase.recording) {
       return;
     }
+    await _aiBridge.cancelRecording();
     _currentPcm = null;
     state = state.copyWith(
       phase: AudioTurnPhase.cancelled,
@@ -123,7 +126,13 @@ class AudioTurnController extends StateNotifier<AudioTurnState> {
       return;
     }
     final String turnId = state.turnId ?? _newTurnId();
-    final List<int> bytes = _currentPcm ?? _fakeMicCapture(turnId);
+    final List<int> bridgeBytes = await _aiBridge.stopRecording();
+    final List<int> bytes;
+    if (bridgeBytes.isNotEmpty) {
+      bytes = bridgeBytes;
+    } else {
+      bytes = _currentPcm ?? _fakeMicCapture(turnId);
+    }
     _currentPcm = null;
 
     state = state.copyWith(phase: AudioTurnPhase.transcribing, error: null);
@@ -171,7 +180,7 @@ class AudioTurnController extends StateNotifier<AudioTurnState> {
 
   List<int> _fakeMicCapture(String turnId) {
     final String payload = 'pcm16le:$turnId';
-    return payload.codeUnits;
+    return Uint8List.fromList(payload.codeUnits);
   }
 
   double _estimateConfidence(String transcript) {

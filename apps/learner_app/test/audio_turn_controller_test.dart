@@ -7,11 +7,35 @@ import 'package:learner_app/src/practice/practice_telemetry.dart';
 import 'package:learner_app/src/state/settings_state.dart';
 
 class _FakeAiBridge implements AiBridgePlatform {
+  bool started = false;
+
   @override
   Future<void> initialize() async {}
 
   @override
+  Future<void> startRecording() async {
+    started = true;
+  }
+
+  @override
+  Future<List<int>> stopRecording() async {
+    if (!started) {
+      return <int>[];
+    }
+    started = false;
+    return 'pcm16le:bridge'.codeUnits;
+  }
+
+  @override
+  Future<void> cancelRecording() async {
+    started = false;
+  }
+
+  @override
   Future<String> runAsr({required List<int> pcm16leBytes}) async {
+    if (String.fromCharCodes(pcm16leBytes) != 'pcm16le:bridge') {
+      throw StateError('expected bridge bytes');
+    }
     return 'hello world';
   }
 

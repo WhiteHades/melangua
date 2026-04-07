@@ -1,13 +1,37 @@
 abstract class AiBridgePlatform {
   Future<void> initialize();
+  Future<void> startRecording();
+  Future<List<int>> stopRecording();
+  Future<void> cancelRecording();
   Future<String> runAsr({required List<int> pcm16leBytes});
   Future<String> runTutor({required String transcript});
   Future<List<int>> runTts({required String responseText});
 }
 
 class UnimplementedAiBridgePlatform implements AiBridgePlatform {
+  bool _isRecording = false;
+
   @override
   Future<void> initialize() async {}
+
+  @override
+  Future<void> startRecording() async {
+    _isRecording = true;
+  }
+
+  @override
+  Future<List<int>> stopRecording() async {
+    if (!_isRecording) {
+      return <int>[];
+    }
+    _isRecording = false;
+    return 'pcm16le:simulated'.codeUnits;
+  }
+
+  @override
+  Future<void> cancelRecording() async {
+    _isRecording = false;
+  }
 
   @override
   Future<String> runAsr({required List<int> pcm16leBytes}) async {
