@@ -1,0 +1,17 @@
+{
+  "name": "melingo-monorepo",
+  "private": true,
+  "version": "0.1.0",
+  "description": "tooling shell for melingo monorepo",
+  "scripts": {
+    "typecheck": "python3 -m compileall backend/api",
+    "test": "python3 -m pytest backend/api/tests",
+    "lint": "python3 -m ruff check backend/api",
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "husky": "^9.1.7",
+    "lint-staged": "^16.4.0",
+    "prettier": "^3.8.1"
+  }
+}
